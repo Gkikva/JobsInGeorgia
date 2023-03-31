@@ -1,0 +1,101 @@
+{% extends 'layout.html' %}
+{% block content %}
+<!-- Section: Design Block -->
+{% if current_user.is_authenticated and "admin" in current_user.email%}
+<div class="container">
+<form method="POST" action="/uploadVacancy">
+                <div class="form-group">
+                <h4> განმცხადებლის პირადი ინფორმაცია, რათა საჭირობის შემთხვევაში მოხდეს კომპანიის მხრიდან დაკავშირება</h4>
+<!--                    <label for="fullName"></label>-->
+                    <input name="anonouncerFullN"  type="text" class="form-control" id="fullName" placeholder="განცმცხადებლის სახელი და გვარი">
+                </div>
+                <div class="form-group">
+<!--                    <label for="phone">განმცხადებლის ტელეფონის ნომერი: საჭიროების შემთხვევაში დასაკონტაქტებლად</label>-->
+                    <input name="announcerPhone" type="number" pattern="[0-9]{10}" class="form-control" id="phone"
+                           placeholder="განმცხადებლის ტელეფონის ნომერი">
+                </div>
+                <div class="form-group">
+<!--                    <label for="email">Email</label>-->
+                    <input name="anouncerPrivateEmail"  type="email" class="form-control" id="email" placeholder="განმცხადებლის  პირადი მეილი">
+                </div>
+                <hr>
+                <hr>
+                <h4> ვაკანსიისთვის საჭირო ინფორმაცია</h4>
+                <div class="form-group">
+<!--                    <label for="companyName">კომპანიის სახელი/ფიზიკური პირის სახელი</label>-->
+                    <input name="companyName" type="text" class="form-control" id="companyName" placeholder="კომპანიის სახელი/ფიზიკური პირის სახელი">
+                </div>
+                <hr>
+                <div class="form-group">
+                    <label for="companyName">კომპანიის ლოგო ლინკის სახით</label>
+                    <input name="companylogo" type="text" class="form-control" id="companylogo" placeholder="https://www.....com/example.png">
+                </div>
+                <hr>
+                <div class="form-group">
+<!--                    <label for="companyCode">საიდენთიფიკაციო კოდი / პირადობის ნომერი</label>-->
+                    <input name="companyCode" type="number" class="form-control" id="companyCode" placeholder="საიდენთიფიკაციო კოდი / პირადობის ნომერი">
+                </div>
+                <hr>
+                <div class="form-group">
+<!--                    <label for="companyMail">Company Mail</label>-->
+                    <input name="companyMail" type="email" class="form-control" id="companyMail" placeholder="მეილი სადაც გამოიგზავნება რეზიუმე">
+                </div>
+                <hr>
+                <div class="form-group">
+<!--                    <label for="privateNumber">Private Number</label>-->
+                    <input name="companynumber"  type="number" class="form-control" id="privateNumber" placeholder="კომპანიის საკონტაქტო ნომერი">
+                </div>
+
+                <hr>
+                <div class="form-group">
+<!--                    <label for="jobtittle">ვაკანსიის დასახელება</label>-->
+                    <textarea name="companyjobtittle" class="form-control" id="jobTittle" rows="2" maxlength="50" placeholder="ვაკანსიის დასახელება"></textarea>
+                </div>
+                <hr>
+                <div class="form-group">
+<!--                    <label for="jobplace">სამუშაო ადგილი/ქალაქი</label>-->
+                    <textarea name="companyjobplace" class="form-control" id="jobPlace" rows="2" maxlength="50" placeholder="სამუშაო ადგილი/ქალაქი"></textarea>
+                </div>
+                <hr>
+                <div class="form-group">
+                    <label for="jobSmallDescription">ვაკანსიის პატარა დახასიათება</label>
+                    <textarea name="companyjobshortdescription" class="form-control" id="jobSmallDescription" rows="2" maxlength="50" placeholder="მაქსიმუმ 50 სიმბოლო"></textarea>
+                </div>
+                <hr>
+                <div class="form-group">
+                    <label for="jobDescription">ვაკანსიის სრული დასახელება</label>
+                    <textarea  name="companyjoblongtdescription" class="form-control" id="jobDescription" rows="3" placeholder=""></textarea>
+                </div>
+                 <div class="form-group">
+<!--                    <label for="privateNumber">ხელფასი</label>-->
+                    <input name="jobSalary"  type="text" class="form-control" id="salary" placeholder="ხელფასი">
+                </div>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label >განცხადების მიღების თარიღი</label>
+                            <input name="jobstartDate" type="date">
+                        </div>
+                        <div class="col-md-6">
+                            <label >განცხადების დასასრულის თარიღი</label>
+                            <input name="jobendDate" type="date">
+                        </div>
+                    </div>
+                </div>
+                <hr>
+<!--                <div class="form-group">-->
+<!--                    <label for="additionalText">დამატებითი კომენტარი</label>-->
+<!--                    <textarea name="additionalText" class="form-control" id="additionalText" rows="3"></textarea>-->
+<!--                </div>-->
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-6"><button type="submit" class="btn btn-primary">გაგზავნა</button></div>
+
+                        <div class="col-lg-6"><a href="{{ url_for('home_admin') }}">უკან დაბრუნება</a></div>
+                    </div>
+                </div>
+</form>
+    </div>
+{% endif %}
+<!-- Section: Design Block -->
+{% endblock content %}

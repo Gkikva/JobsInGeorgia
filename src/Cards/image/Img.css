@@ -1,0 +1,16 @@
+
+.defaultImage {
+    border-radius: 15px;
+    height: 100px;
+    width: 100px; 
+}
+
+
+@media screen and (max-width: 900px) {
+    .defaultImage {
+        border-radius: 15px;
+        height: 50px;
+        width: 50px; 
+    }
+    
+}

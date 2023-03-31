@@ -1,0 +1,13 @@
+.containerCompanyDescription {
+    position: fixed;
+    overflow-y: scroll;
+    height: 680px;
+    width: 50%;
+    /* height:*/
+    /*we do not gave height , because it is more easy that it fits by itself, and when dimension is changed, it fits all height*/
+    border: 0.5px solid rgb(190, 189, 190);
+    border-radius: 5px;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.3);
+    margin: 5px auto 5px auto;
+    padding: 15px;
+}

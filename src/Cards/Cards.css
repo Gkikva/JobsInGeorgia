@@ -1,0 +1,104 @@
+.cards {
+  display: grid;
+  float: right;
+  grid-template-columns: 35% 35% 30%;
+  grid-template-rows: 20% 20% 20% 20% 20%;
+  width: 100%;
+  /* height:*/
+  /*we do not gave height , because it is more easy that it fits by itself, and when dimension is changed, it fits all height*/
+  border: 0.5px solid rgb(190, 189, 190);
+  border-radius: 5px;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.3);
+  margin: 5px auto 5px auto;
+  padding: 15px;
+
+}
+
+.CompanyJobTittle {
+  grid-column: span 2/3;
+}
+
+.companyImg {
+  display: flex;
+  grid-column-start: 3;
+  grid-row: span 3/4;
+  justify-content: center;
+  align-items: center;
+}
+
+.companyName {
+  grid-row-start: 2;
+  margin-top: 8px;
+}
+
+.JobLocation {
+  grid-row-start: 2;
+  grid-column-end: 3;
+  margin-top: 2px;
+  margin-top: 5px;
+}
+
+@media screen and (max-width: 900px) {
+  .JobLocation {
+    grid-row-start: 2;
+    grid-column-end: 3;
+    margin-top: 2px;
+    margin-top: 5px;
+    font-size: 12px;
+  }
+
+}
+
+.CompanyJobDescription {
+  grid-row-start: 3;
+  grid-row-end: 5;
+  grid-column-start: span 2;
+  grid-column-end: 3;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 5px;
+}
+
+.companyRating {
+  grid-row-start: 4;
+  grid-column-start: 3;
+  margin-top: 2px;
+  padding-top: 5px;
+}
+
+.WhenWasPublished {
+  display: flex;
+  align-items: end;
+  grid-row-start: 5;
+  grid-column: span 2/3;
+}
+
+.SeeFullDescription {
+  grid-row-start: 5;
+  grid-column-start: 3;
+  font-size: 13px;
+  margin-top: 7px;
+  margin-bottom: 20;
+}
+
+
+/* ============================================================== */
+
+/* MOBILE VERSION */
+
+
+.grandContainer {
+  display: flex;
+  position: absolute;
+  /* margin-top: -20px;
+  margin-left: -50px; */
+  padding: 10px;
+
+  background-color: white;
+  border: 0.5px solid rgb(190, 189, 190);
+  border-radius: 5px;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.3);
+  width: 450px;
+  /* height: 100px; */
+}
