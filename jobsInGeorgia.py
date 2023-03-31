@@ -30,10 +30,7 @@ login_manager.login_view = "login"
 # hashed_password = bcrypt.generate_password_hash("123456789").decode('utf-8')
 # print(bcrypt.check_password_hash(hashed_password, "123456789"))
 
-@app.route("/")
-@cross_origin()
-def serve():
-    return send_from_directory(app.static_folder, "index.html")
+
 
 class RegistrationForm(FlaskForm):
     username = StringField('მომხმარებელი', validators=[DataRequired(), Length(min=2, max=20)])
@@ -298,7 +295,10 @@ def salaryRate():
         db.session.commit()
     return render_template("salaryRate.html")
 
-
+@app.route("/")
+@cross_origin()
+def serve():
+    return send_from_directory(app.static_folder, "index.html")
 
 if __name__ == '__main__':
     db.create_all()
