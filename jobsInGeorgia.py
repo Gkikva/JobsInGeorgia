@@ -12,7 +12,7 @@ from DB_manipulation import *
 from datetime import datetime
 
 
-app = Flask(__name__, static_folder="jobs_in_georgia/build", static_url_path="")
+app = Flask(__name__, static_folder="build", static_url_path="")
 CORS(app)
 app.config["SECRET_KEY"] = "Aa!@123456"
 app.config["SQLALCHEMY_DATABASE_URI"] = 'sqlite:///site.db'
