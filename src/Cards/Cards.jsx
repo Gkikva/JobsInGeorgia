@@ -40,7 +40,7 @@ function Cards(properties) {
 
   function DesktopVersion() {
     return <ShowJobFullDescriptionDesktopVersion
-      vacancyID = {properties.vacancyID}
+      vacancyID={properties.vacancyID}
       jobTittle={properties.jobTittle}
       companyName={properties.companyName}
       jobPlace={properties.jobPlace}
@@ -54,21 +54,31 @@ function Cards(properties) {
   function MobileVersion() {
     return (
       <div className="backgroundGrandContainer">
-    <div className="grandContainer">
-      <div>
-        <button id="buttonStyle" onClick={() => setpressButton(false)}
-        style={{display:"flex", justifyContent:"flex-end", backgroundColor: is_mouse_over ? "#f5ba13" : "#3A98B9", borderStyle: "none", borderRadius: "5px"}} 
-        onMouseOver={mouseOverButton} 
-        onMouseOut={mouseOutOfButton}
-        >დახურე ფანჯარა</button>
-        <div className='title'>{properties.jobTittle}</div>
-        <div className='companyName'>{properties.companyName}</div>
-        <div>{properties.jobPlace}</div>
-        <div>{properties.companyEmail}</div>
-        <div>{properties.jobFullDescription}</div>
+        <div className="grandContainer">
+          <div>
+            <button id="buttonStyle" onClick={() => setpressButton(false)}
+              style={{ display: "flex", justifyContent: "flex-end", backgroundColor: is_mouse_over ? "#f5ba13" : "#3A98B9", borderStyle: "none", borderRadius: "5px" }}
+              onMouseOver={mouseOverButton}
+              onMouseOut={mouseOutOfButton}
+            >დახურე ფანჯარა</button>
+            <div className="containerForJobDescription">
+              <Advertisement />
+              <ul class="list-group">
+                <li class="list-group-item"><h5>{properties.jobTittle}</h5></li>
+                <li class="list-group-item">კომპანია : {properties.companyName}</li>
+                <li class="list-group-item">სამუშაო ადგილი 🗺: {properties.jobPlace}</li>
+                <li class="list-group-item">{properties.companyEmail}</li>
+                <li class="list-group-item">ხელფასი 💰 {properties.CompanyJobSalary} </li>
+                <li class="list-group-item">მომხმარებლების ხელფასი 💰:  {properties.customSalary} <a type="button" className="btn btn-warning btn-sm" href="https://calm-crag-71620.herokuapp.com/home">◀ მიანიჭე ხელფასი შენ</a></li>
+                <li class="list-group-item">ვაკანსიის ID: {properties.vacancyID}</li>
+              </ul>
+              <hr />
+              <div><h3>სამუშაო აღწერილობა</h3></div>
+              <div>{properties.jobFullDescription}</div>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
-    </div>
   )}
 
 
@@ -78,7 +88,7 @@ function Cards(properties) {
   // const [showOrNotShow, setshowOrNotShow] = useState(false)
   // function CompanyDescripionMain(){
   //   return <div>
-  //     <CompanyDescription 
+  //     <CompanyDescription
   //               companyName={properties.companyName} 
   //               img={properties.img}/>
   //     </div>
@@ -88,57 +98,57 @@ function Cards(properties) {
   // console.log(isMobile + "  isMobile")
   // console.log(pressButton + "  pressButton")
   return (
-  <div className='cards'>
-    <div className='CompanyJobTittle'>
-      <CompanyJobTittle jobTittle={properties.jobTittle} />
-      </div>
-    <div className='companyName'>
-      {/* this commented button trigers show description logic, so with another comments uncomment this */}
-      {/* <button onClick={() => setshowOrNotShow(true)} style={{borderStyle:"none"}}> */}
-      <button onClick="" style={{borderStyle:"none"}}>
-        <Name name={properties.companyName} /></button>
-        </div>
-    <div className='JobLocation'>
-      <JobPlace jobPlace={properties.jobPlace} />
-      </div>
-    <div className='CompanyJobDescription'>
-      <JobDescription description={properties.description} />
-      </div>
-    <div className='companyImg'>
-      <Img defaultIMG={properties.img} />
-      </div>
-    <div className='companyRating' 
-                    style={{ 
-                        display: "flex", 
-                        justifyContent: 'center' 
-                        }}
-                        >⭐4.5</div>
-    <div className='WhenWasPublished'>🎯 {properties.companyJobStartDate} 🏁{properties.companyJobEndDate} </div>
-    <button className='SeeFullDescription' 
-            onClick={() => {
-              setpressButton(true); 
-              {/* this commented setshowOrNotShow trigers show description logic, so with another comments uncomment this */}
-              // setshowOrNotShow(false);
-            }}
-            style={{ 
-                  backgroundColor: is_mouse_over ? "#f5ba13" : "white", 
-                  borderStyle: "none", 
-                  borderRadius: "5px" 
-                }} 
-            onMouseOver={mouseOverButton} 
-            onMouseOut={mouseOutOfButton}
+          <div className='cards'>
+            <div className='CompanyJobTittle'>
+              <CompanyJobTittle jobTittle={properties.jobTittle} />
+            </div>
+            <div className='companyName'>
+              {/* this commented button trigers show description logic, so with another comments uncomment this */}
+              {/* <button onClick={() => setshowOrNotShow(true)} style={{borderStyle:"none"}}> */}
+              <button onClick="" style={{ borderStyle: "none" }}>
+                <Name name={properties.companyName} /></button>
+            </div>
+            <div className='JobLocation'>
+              <JobPlace jobPlace={properties.jobPlace} />
+            </div>
+            <div className='CompanyJobDescription'>
+              <JobDescription description={properties.description} />
+            </div>
+            <div className='companyImg'>
+              <Img defaultIMG={properties.img} />
+            </div>
+            <div className='companyRating'
+              style={{
+                display: "flex",
+                justifyContent: 'center'
+              }}
+            >⭐4.5</div>
+            <div className='WhenWasPublished'>🎯 {properties.companyJobStartDate} 🏁{properties.companyJobEndDate} </div>
+            <button className='SeeFullDescription'
+              onClick={() => {
+                setpressButton(true);
+                {/* this commented setshowOrNotShow trigers show description logic, so with another comments uncomment this */ }
+                // setshowOrNotShow(false);
+              }}
+              style={{
+                backgroundColor: is_mouse_over ? "#f5ba13" : "white",
+                borderStyle: "none",
+                borderRadius: "5px"
+              }}
+              onMouseOver={mouseOverButton}
+              onMouseOut={mouseOutOfButton}
             >ნახე მეტი</button>
-    {/* bello is the logic thet shows company description when pushed on company name, so just uncomment it */}
-    {/* {isMobile ? 
+            {/* bello is the logic thet shows company description when pushed on company name, so just uncomment it */}
+            {/* {isMobile ? 
     <>{pressButton ? <MobileVersion /> : ""}</> : 
     <>{showOrNotShow? 
             <CompanyDescripionMain />:<>{pressButton ? <DesktopVersion /> : ""}</> 
             }</>
       } */}
-      {isMobile ? <>{pressButton ? <MobileVersion /> : ""}</> : <>{pressButton ? <DesktopVersion /> : ""}</>}
-  </div>)
+            {isMobile ? <>{pressButton ? <MobileVersion /> : ""}</> : <>{pressButton ? <DesktopVersion /> : ""}</>}
+          </div>)
 }
 
 
-export { Cards };
+          export {Cards};
 
