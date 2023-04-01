@@ -8,6 +8,7 @@ import CompanyJobTittle from './CompanyJobTittle/CompanyJobTittle';
 import JobPlace from './JobPlace/JobPlace';
 import ShowJobFullDescriptionDesktopVersion from './CompanyJobFullDescription/ShowJobFullDescriptionDesktopVersion';
 import CompanyDescription from './CompanyDescription/CompanyDescription';
+import Advertisement from "../Ads/Ads";
 
 
 //  There is Vacancy Card full stucture
@@ -57,11 +58,10 @@ function Cards(properties) {
         <div className="grandContainer">
           <div>
             <button id="buttonStyle" onClick={() => setpressButton(false)}
-              style={{ display: "flex", justifyContent: "flex-end", backgroundColor: is_mouse_over ? "#f5ba13" : "#3A98B9", borderStyle: "none", borderRadius: "5px" }}
+              style={{ marginBottom:"5px" ,display: "flex", justifyContent: "flex-end", backgroundColor: is_mouse_over ? "#f5ba13" : "#3A98B9", borderStyle: "none", borderRadius: "5px" }}
               onMouseOver={mouseOverButton}
               onMouseOut={mouseOutOfButton}
             >დახურე ფანჯარა</button>
-            <div className="containerForJobDescription">
               <Advertisement />
               <ul class="list-group">
                 <li class="list-group-item"><h5>{properties.jobTittle}</h5></li>
@@ -75,7 +75,6 @@ function Cards(properties) {
               <hr />
               <div><h5>სამუშაო აღწერილობა</h5></div>
               <div>{properties.jobFullDescription}</div>
-            </div>
           </div>
         </div>
       </div>
