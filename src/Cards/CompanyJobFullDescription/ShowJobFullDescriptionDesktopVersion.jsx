@@ -9,20 +9,6 @@ function ShowJobFullDescriptionDesktopVersion(properties) {
   
       <div className="containerForJobDescription">
       <Advertisement />
-        {/* <div className='CompanyJobTittle'>ვაკანსიის ID 📜: {properties.vacancyID}</div>
-          <div className='CompanyJobTittle'>ვაკანსია 📜: {properties.jobTittle}</div>
-          <div className='companyName'>კომპანია 🏠: {properties.companyName}</div>
-          <div>სამუშაო ადგილი 🗺: {properties.jobPlace}</div>
-          <div>Email 📧: {properties.companyEmail}</div> */}
-          {/* <div className="row"> */}
-          {/* <div>ხელფასი 💰: <div type="button" className="btn btn-light btn-sm" data-toggle="tooltip" data-placement="top" title="კომპანიის მიერ შეთავაზებული ხელფასი"> {properties.CompanyJobSalary} </div></div>
-          <div>დათვლილი ხელფასი 💰: 
-            <div type="button" className="btn btn-light btn-sm" data-toggle="tooltip" data-placement="top" title="მომხმარებლების მიერ განსაზღვრული ხელფასი"> {properties.customSalary}₾ </div>
-            <a type="button" className="btn btn-warning btn-sm" href="/">◀ მიანიჭე</a>
-          </div> */}
-          {/* </div> */}
-          {/* <hr />
-          <div>{properties.jobFullDescription}</div> */}
           <ul class="list-group">
             <li class="list-group-item"><h5>{properties.jobTittle}</h5></li>
             <li class="list-group-item">კომპანია : {properties.companyName}</li>

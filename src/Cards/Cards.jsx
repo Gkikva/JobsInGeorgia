@@ -73,7 +73,7 @@ function Cards(properties) {
                 <li class="list-group-item">ვაკანსიის ID: {properties.vacancyID}</li>
               </ul>
               <hr />
-              <div><h3>სამუშაო აღწერილობა</h3></div>
+              <div><h5>სამუშაო აღწერილობა</h5></div>
               <div>{properties.jobFullDescription}</div>
             </div>
           </div>
