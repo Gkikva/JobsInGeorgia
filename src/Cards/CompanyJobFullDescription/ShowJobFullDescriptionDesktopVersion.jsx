@@ -15,7 +15,7 @@ function ShowJobFullDescriptionDesktopVersion(properties) {
             <li class="list-group-item">სამუშაო ადგილი 🗺: {properties.jobPlace}</li>
             <li class="list-group-item">{properties.companyEmail}</li>
             <li class="list-group-item">ხელფასი 💰 {properties.CompanyJobSalary} </li>
-            <li class="list-group-item">მომხმარებლების ხელფასი 💰:  {properties.customSalary} <a type="button" className="btn btn-warning btn-sm" href="https://calm-crag-71620.herokuapp.com/home">◀ მიანიჭე ხელფასი შენ</a></li>
+            <li class="list-group-item">მომხმარებლების ხელფასი 💰:  {properties.customSalary} <a type="button" className="btn btn-warning btn-sm" href="/home">◀ მიანიჭე ხელფასი შენ</a></li>
             <li class="list-group-item">ვაკანსიის ID: {properties.vacancyID}</li>
           </ul>
           <hr />

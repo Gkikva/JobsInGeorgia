@@ -60,6 +60,22 @@
   margin-top: 5px;
 }
 
+@media screen and (max-width: 900px) {
+  .CompanyJobDescription {
+    font-size: 11px;
+    grid-row-start: 3;
+    grid-row-end: 5;
+    grid-column-start: span 2;
+    grid-column-end: 3;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 5px;
+    padding-top: 5px;
+  }
+
+}
+
 .companyRating {
   grid-row-start: 4;
   grid-column-start: 3;
@@ -72,6 +88,16 @@
   align-items: end;
   grid-row-start: 5;
   grid-column: span 2/3;
+}
+
+@media screen and (max-width: 900px) {
+  .WhenWasPublished {
+    display: flex;
+    align-items: end;
+    grid-row-start: 5;
+    grid-column: span 2/3;
+    font-size: 12px;
+  }
 }
 
 .SeeFullDescription {
