@@ -12,6 +12,8 @@ from DB_manipulation import *
 from datetime import datetime
 
 
+
+ADMIN_USER_ID = [1]
 app = Flask(__name__, static_folder="build", static_url_path="")
 CORS(app)
 app.config["SECRET_KEY"] = "Aa!@123456"
@@ -130,14 +132,7 @@ def load_user(user_id):
 def home():
     print(current_user)
     posts = SalaryRate.query.all()
-    return render_template('home.html', posts=posts)
-
-@app.route('/home_admin', methods=['GET', 'POST'])
-@login_required
-def home_admin():
-    print(current_user.email)
-    posts = SalaryRate.query.all()
-    return render_template('home_admin.html', posts=posts)
+    return render_template('home.html', posts=posts, ADMIN_USER_ID=ADMIN_USER_ID)
 
 
 """login route"""
@@ -149,18 +144,16 @@ def login():
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
-        print(user.password)
-        print(user.email)
-        # print(request.se)
-        if user and bcrypt.check_password_hash(user.password, form.password.data) and "admin" in form.email.data:
-            print(f"{current_user} you loged in as admins")
-            login_user(user)
-            flash('წარმატებით შეხვედით სისტემაში როგორც ადმინი', "success")
-            return redirect(url_for("home_admin"))
-        elif user and bcrypt.check_password_hash(user.password, form.password.data):
-            login_user(user)
-            flash('წარმატებით შეხვედით სისტემაში', "success")
-            return redirect(url_for("login"))
+        if user and bcrypt.check_password_hash(user.password, form.password.data):
+            if user.id in ADMIN_USER_ID:
+                print(f"{current_user} you loged in as admins")
+                login_user(user)
+                flash('წარმატებით შეხვედით სისტემაში როგორც ადმინი', "success")
+                return redirect(url_for("home"))
+            else:
+                login_user(user)
+                flash('წარმატებით შეხვედით სისტემაში', "success")
+                return redirect(url_for("home"))
         else:
             flash("ასეთი მონაცემები არ არსებობს", 'danger')
     return render_template('login.html', form=form)
@@ -217,7 +210,6 @@ def uploadVacancy():
         db.session.add(company_info)
         db.session.commit()
         flash('წარმატებით აიტვირთა ვაკანსია', "success")
-        return redirect(url_for("home_admin"))
     return render_template('uploadVacancy.html')
 
 
@@ -227,28 +219,32 @@ def uploadVacancy():
 def send_data():
     def salary_rate(vacancy_id):
         found_vacancies = SalaryRate.query.filter_by(vacancy_id=vacancy_id).all()
-        count = SalaryRate.query.filter_by(vacancy_id=1).count()
+        count = SalaryRate.query.filter_by(vacancy_id=vacancy_id).count()
         total = 0
+        
         for vacancies in found_vacancies:
             total += vacancies.salary_amount
         """to take away error> divide zero error"""
         if count == 0:
             return total/1
         else:
+            print(f"this is count  {count}")
             return total/count
+            
+    def salary_count(vacancy_id):
+        return SalaryRate.query.filter_by(vacancy_id=vacancy_id).count()
     
     """We sending last Updated DB with 300 limit row"""
     items = CompanyInfo.query.order_by(CompanyInfo.id.desc()).limit(300).all()
     list_for_react = []
     for item in items:
-        salary_amount = salary_rate(item.id)
+        salary_amount = round(salary_rate(item.id))
+        costumer_count = salary_count(item.id)
+        print(f"this is average salary {salary_amount}")
+        print(f"this is count {costumer_count}")
         company_ID = item.id
-        # company_announcer = item.company_announcer
-        # company_announcerPhone = item.company_announcerPhone
-        # company_anouncerEmail = item.company_anouncerEmail
         company_name = item.company_name
         company_logo = item.company_logo
-        # company_RSID = item.company_ID
         company_mail = item.company_mail
         company_Phonenumber = item.company_Phonenumber
         company_jobtittle = item.company_jobtittle
@@ -283,7 +279,6 @@ def send_data():
 @login_required
 def salaryRate():
     print(request.method)
-    # print(f"{current_user.id}  current user in salaryRate")
     if request.method == "POST":
         info = SalaryRate(
             vacancy_id = request.form["vacanyId"],
@@ -293,6 +288,7 @@ def salaryRate():
         )
         db.session.add(info)
         db.session.commit()
+        flash("წარმატებით აიტვირთა მინიჭებული ხელფასის რაოდენობა","success")
     return render_template("salaryRate.html")
 
 @app.route("/")
