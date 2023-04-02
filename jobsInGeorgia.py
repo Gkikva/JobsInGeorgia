@@ -2,13 +2,12 @@ from flask import Flask, jsonify, request,render_template, url_for, flash, redir
 from flask_cors import CORS, cross_origin
 from flask_sqlalchemy import SQLAlchemy
 from flask.helpers import send_from_directory
-from sqlalchemy import func
+
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager, UserMixin, login_user, current_user, logout_user, login_required
 from flask_wtf import FlaskForm
 from wtforms import StringField,PasswordField, SubmitField, BooleanField, IntegerField,TextAreaField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
-from DB_manipulation import *
 from datetime import datetime
 
 
@@ -131,8 +130,35 @@ def load_user(user_id):
 @login_required
 def home():
     print(current_user)
+    if request.method == "POST":
+        print(request.form['inputedValue'])
+        vacancy_id = request.form['inputedValue']
+        vacancy= CompanyInfo.query.get_or_404(vacancy_id)
+        print(f"{vacancy.id} this is vacancyaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaay")
+        db.session.delete(vacancy)
+        db.session.commit()
+        flash("ვაკანსია წაშლილია","success")
+        return redirect(url_for('home'))
+    vacancys = CompanyInfo.query.all()
     posts = SalaryRate.query.all()
-    return render_template('home.html', posts=posts, ADMIN_USER_ID=ADMIN_USER_ID)
+    return render_template('home.html', posts=posts, ADMIN_USER_ID=ADMIN_USER_ID, vacancys=vacancys)
+
+"""User Registration route"""
+@app.route('/registration', methods=['GET', 'POST'])
+def registration():
+    """if user is loged in redirect into home function"""
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
+    form = RegistrationForm()
+    if form.validate_on_submit():
+        hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+        user =User(username=form.username.data, email=form.email.data, password=hashed_password)
+        db.session.add(user)
+        db.session.commit()
+        flash(f"ექაუნთი შექმნილია {form.username.data}","success")
+        return redirect(url_for("login"))
+    return render_template("register.html", form=form)
+
 
 
 """login route"""
@@ -158,23 +184,6 @@ def login():
             flash("ასეთი მონაცემები არ არსებობს", 'danger')
     return render_template('login.html', form=form)
 
-
-"""User Registration route"""
-@app.route('/registration', methods=['GET', 'POST'])
-def registration():
-    """if user is loged in redirect into home function"""
-    if current_user.is_authenticated:
-        return redirect(url_for('home'))
-    form = RegistrationForm()
-    if form.validate_on_submit():
-        hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-        user =User(username=form.username.data, email=form.email.data, password=hashed_password)
-        db.session.add(user)
-        db.session.commit()
-        flash(f"ექაუნთი შექმნილია {form.username.data}","success")
-        return redirect(url_for("login"))
-    return render_template("register.html", form=form)
-
 """LogOut rout"""
 @app.route('/logout')
 @login_required
@@ -183,7 +192,7 @@ def logout():
     return redirect(url_for('home'))
 
 
-
+"""Upload vacancy route"""
 @app.route("/uploadVacancy",  methods=['GET', 'POST'])
 @login_required
 def uploadVacancy():
@@ -212,6 +221,34 @@ def uploadVacancy():
         flash('წარმატებით აიტვირთა ვაკანსია', "success")
     return render_template('uploadVacancy.html')
 
+"""Register Vacancy into DB"""
+@app.route('/salaryRate', methods=['GET', 'POST'])
+@login_required
+def salaryRate():
+    print(request.method)
+    if request.method == "POST":
+        info = SalaryRate(
+            vacancy_id = request.form["vacanyId"],
+            salary_amount =request.form["salaryRate"],
+            comment = request.form["comment_salary"],
+            user_id = current_user.id
+        )
+        db.session.add(info)
+        db.session.commit()
+        flash("წარმატებით აიტვირთა მინიჭებული ხელფასის რაოდენობა","success")
+    return render_template("salaryRate.html")
+
+
+# @app.route("/home/<int:vacancy_id>/delete", methods=["POST"])
+# @login_required
+# def delete_vacancy(vacancy_id):
+#     if request.method == "POST":
+#         print(f"{request.form['inputedValue']} this is the vacancy ID for deleting")
+#         vacancy= CompanyInfo.query.get_or_404(vacancy_id)
+#         db.session.delete(vacancy)
+#         db.session.commit()
+#         flash("ვაკანსია წაშლილია","success")
+#         return redirect(url_for('home'))
 
 """Send Data"""
 @app.route('/api/data', methods=['GET', 'POST'])
@@ -274,27 +311,15 @@ def send_data():
     return jsonify(list_for_react)
 
 # send_data()
-"""Register Vacancy into DB"""
-@app.route('/salaryRate', methods=['GET', 'POST'])
-@login_required
-def salaryRate():
-    print(request.method)
-    if request.method == "POST":
-        info = SalaryRate(
-            vacancy_id = request.form["vacanyId"],
-            salary_amount =request.form["salaryRate"],
-            comment = request.form["comment_salary"],
-            user_id = current_user.id
-        )
-        db.session.add(info)
-        db.session.commit()
-        flash("წარმატებით აიტვირთა მინიჭებული ხელფასის რაოდენობა","success")
-    return render_template("salaryRate.html")
+
 
 @app.route("/")
 @cross_origin()
 def serve():
     return send_from_directory(app.static_folder, "index.html")
+
+
+
 
 if __name__ == '__main__':
     db.create_all()

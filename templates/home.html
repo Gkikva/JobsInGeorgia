@@ -1,62 +1,104 @@
 {% extends 'layout.html' %}
 {% block content %}
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="/">ვაკანსიები</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav">
-          {% if current_user.is_authenticated %}
-              <li class="nav-item">
-                  <a class="nav-link" href="{{ url_for('logout') }}">სისტემიდან გამოსვლა</a>
-                </li>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="/">ვაკანსიები</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav"
+    aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav">
+      {% if current_user.is_authenticated %}
+      <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('logout') }}">სისტემიდან გამოსვლა</a>
+      </li>
 
-              <li class="nav-item">
-                  <a class="nav-link" href="{{ url_for('salaryRate') }}">განსაზღვრე ხელფასი</a>
-            </li>
-                {%if current_user.id in ADMIN_USER_ID%}
-            <li class="nav-item">
-                  <a class="nav-link" href="{{ url_for('uploadVacancy') }}">ვაკანსიის ატვირთვა</a>
-            </li>
-              {% endif %}
-          {% else %}
-            <li class="nav-item">
-              <a class="nav-link" href="{{ url_for('login') }}">სისტემაში შესვლა</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{{ url_for('registration') }}">რეგისრაცია</a>
-            </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('salaryRate') }}">განსაზღვრე ხელფასი</a>
+      </li>
+      {%if current_user.id in ADMIN_USER_ID%}
+      <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('uploadVacancy') }}">ვაკანსიის ატვირთვა</a>
+      </li>
+      {% endif %}
+      {% else %}
+      <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('login') }}">სისტემაში შესვლა</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ url_for('registration') }}">რეგისრაცია</a>
+      </li>
 
-          {% endif %}
-      </ul>
-    </div>
-  </nav>
-    <div class="container">
-        <div class="card border-warning mb-3" style="max-width: 18rem;">
-          <div class="card-header">მომხმარებლის ID: {{ current_user.id}}</div>
-          <div class="card-body text-warning">
-            <h5 class="card-title">{{ current_user}}</h5>
-            <p class="card-text">{{ current_user.username }}</p>
-              <p class="card-text">{{ current_user.email }}</p>
-          </div>
-        </div>
-    </div>
-
-{% for post in posts %}
-  <div class="container">
-    <div class="row">
-      <div class="col-md-4">
-        <div class="card">
-          <div class="card-body">
-            <h5 class="card-title">ავტორი: {{ post.author.username }}</h5>
-              <p class="card-text">კომპანია: {{ post.company_name }}.</p>
-              <p class="card-text">ვაკანსია: {{ post.company_jobtittle }}.</p>
-            <a href="#" class="btn btn-primary">Go somewhere</a>
-          </div>
-        </div>
+      {% endif %}
+    </ul>
+  </div>
+  {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+  {% for category, message in messages %}
+  <div class="alert alert-{{category}}">
+    {{message}}
+  </div>
+  {% endfor%}
+  {% endif %}
+  {% endwith %}
+</nav>
+<div class="container">
+  <div class="card">
+    <div class="card-body">
+      <div class="card-header">მომხმარებლის ID: {{ current_user.id}}</div>
+      <div class="card-body text-warning">
+        <h5 class="card-title">მომხმარებელი: {{ current_user}}</h5>
+        <p class="card-text">სახელი: {{ current_user.username }}</p>
+        <p class="card-text">მეილი: {{ current_user.email }}</p>
       </div>
+      <!-- Button trigger modal -->
+      <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteleModal">
+        წაშალე ვაკანსია
+      </button>
     </div>
   </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="deleteleModal" tabindex="-1" role="dialog" aria-labelledby="deleteleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteleModalLabel">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <form action="" method="post">
+        <div class="modal-body">
+          დაწმუნებული ხარ რომ წაშლა გინდა?
+          <input type="number" placeholder="ჩაწერე ვაკანსიის ID" name="inputedValue">
+        </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">გადავიფიქრე</button>
+        <button type="submit" class="btn btn-danger">წაშალე</button>
+      </div>
+        </form>
+    </div>
+  </div>
+</div>
+{%if current_user.id in ADMIN_USER_ID%}
+{% for vacancy in vacancys %}
+<table style="width:100%">
+  <tr>
+    <th>ვაკანსიის ID</th>
+    <th>კომპანია</th>
+    <th>ვაკანსიის დასახელება</th>
+    <th>მეილი</th>
+  </tr>
+  <tr>
+    <td>{{ vacancy.id }}</td>
+    <td>{{ vacancy.company_name }}</td>
+    <td>{{ vacancy.company_jobtittle }}</td>
+    <td>{{ vacancy.company_mail }}</td>
+  </tr>
+</table>
+<!-- Modal -->
 {% endfor %}
+{% endif %}
 {% endblock content %}
