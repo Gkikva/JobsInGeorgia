@@ -124,7 +124,7 @@ def load_user(user_id):
 """==================================="""
 
 """home page where shown links and posts"""
-# @app.route("/")
+
 @app.route('/home', methods=['GET', 'POST'])
 @login_required
 def home():
