@@ -17,8 +17,8 @@ import ToBackEnd from './navTobackEnd';
 
 function MainPage() {
     return <div>
-        <Navbar />
         <ToBackEnd />
+        <Navbar />
         <App />
     </div>
 }
