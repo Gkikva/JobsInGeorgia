@@ -51,10 +51,12 @@
         <p class="card-text">სახელი: {{ current_user.username }}</p>
         <p class="card-text">მეილი: {{ current_user.email }}</p>
       </div>
+      {%if current_user.id in ADMIN_USER_ID%}
       <!-- Button trigger modal -->
       <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteleModal">
         წაშალე ვაკანსია
       </button>
+      {% endif %}
     </div>
   </div>
 </div>
