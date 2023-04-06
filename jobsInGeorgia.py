@@ -129,21 +129,26 @@ def load_user(user_id):
 @app.route('/home', methods=['GET', 'POST'])
 @login_required
 def home():
-    print(current_user)
+    print(f">>> {current_user} at home page")
     if request.method == "POST":
-        print(request.form['inputedValue'])
         vacancy_id = request.form['inputedValue']
+        print(f">>> {vacancy_id} is DELETING the Post")
         """search vacancy by inputed id"""
         if vacancy_id:
             vacancy= CompanyInfo.query.get(vacancy_id)
             user_rates = SalaryRate.query.filter_by(vacancy_id=vacancy_id).all()
+            print(f">>> {vacancy}   fount vacancy")
+            print(f">>> {user_rates}  and related  rates")
             if vacancy or user_rates:
                 for rate in user_rates:
                     db.session.delete(rate)
+                    print(f">>> Deleting rates")
                 db.session.delete(vacancy)
                 db.session.commit()
+                print(f">>> Deleted vacancy and rates")
                 flash("ვაკანსია წაშლილია","success")
             else:
+                print(f">>> {vacancy_id} there is nos this ID")
                 flash("ვაკანსია ვერ მოიძებნა", "danger")
         else:
             flash("ვაკანსიის ID შეიყვანეთ", "danger")
@@ -156,7 +161,9 @@ def home():
 @app.route('/registration', methods=['GET', 'POST'])
 def registration():
     """if user is loged in redirect into home function"""
+    print(f">>> {current_user} on register page")
     if current_user.is_authenticated:
+        print(f">>> {current_user} redirected to home")
         return redirect(url_for('home'))
     form = RegistrationForm()
     if form.validate_on_submit():
@@ -165,6 +172,7 @@ def registration():
         db.session.add(user)
         db.session.commit()
         flash(f"ექაუნთი შექმნილია {form.username.data}","success")
+        print(f">>> {current_user} registered")
         return redirect(url_for("login"))
     return render_template("register.html", form=form)
 
@@ -174,11 +182,14 @@ def registration():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     """if user is loged in redirect into home function"""
+    print(f">>> {current_user} is at login page")
     if current_user.is_authenticated:
+        print(f">>> {current_user} already loged in")
         return redirect(url_for('home'))
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
+        print(f">>> {user} has loged in")
         if user and bcrypt.check_password_hash(user.password, form.password.data):
             if user.id in ADMIN_USER_ID:
                 print(f"{current_user} you loged in as admins")
@@ -186,6 +197,7 @@ def login():
                 flash('წარმატებით შეხვედით სისტემაში როგორც ადმინი', "success")
                 return redirect(url_for("home"))
             else:
+                print(f">>> {current_user} General user")
                 login_user(user)
                 flash('წარმატებით შეხვედით სისტემაში', "success")
                 return redirect(url_for("home"))
@@ -227,6 +239,7 @@ def uploadVacancy():
                                    )
         db.session.add(company_info)
         db.session.commit()
+        print(f">>> {current_user} uploaded vacancy")
         flash('წარმატებით აიტვირთა ვაკანსია', "success")
     return render_template('uploadVacancy.html')
 
@@ -234,7 +247,7 @@ def uploadVacancy():
 @app.route('/salaryRate', methods=['GET', 'POST'])
 @login_required
 def salaryRate():
-    print(request.method)
+    print(f">>> {request.method} at salary rate page")
     if request.method == "POST":
         info = SalaryRate(
             vacancy_id = request.form["vacanyId"],
@@ -244,20 +257,9 @@ def salaryRate():
         )
         db.session.add(info)
         db.session.commit()
+        print(f">>> {current_user} gave rate")
         flash("წარმატებით აიტვირთა მინიჭებული ხელფასის რაოდენობა","success")
     return render_template("salaryRate.html")
-
-
-# @app.route("/home/<int:vacancy_id>/delete", methods=["POST"])
-# @login_required
-# def delete_vacancy(vacancy_id):
-#     if request.method == "POST":
-#         print(f"{request.form['inputedValue']} this is the vacancy ID for deleting")
-#         vacancy= CompanyInfo.query.get_or_404(vacancy_id)
-#         db.session.delete(vacancy)
-#         db.session.commit()
-#         flash("ვაკანსია წაშლილია","success")
-#         return redirect(url_for('home'))
 
 """Send Data"""
 @app.route('/api/data', methods=['GET', 'POST'])
@@ -325,6 +327,7 @@ def send_data():
 @app.route("/")
 @cross_origin()
 def serve():
+    print(f">>> {current_user} is at index page")
     return send_from_directory(app.static_folder, "index.html")
 
 
