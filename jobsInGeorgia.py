@@ -133,12 +133,21 @@ def home():
     if request.method == "POST":
         print(request.form['inputedValue'])
         vacancy_id = request.form['inputedValue']
-        vacancy= CompanyInfo.query.get_or_404(vacancy_id)
-        print(f"{vacancy.id} this is vacancyaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaay")
-        db.session.delete(vacancy)
-        db.session.commit()
-        flash("ვაკანსია წაშლილია","success")
-        return redirect(url_for('home'))
+        """search vacancy by inputed id"""
+        if vacancy_id:
+            vacancy= CompanyInfo.query.get(vacancy_id)
+            user_rates = SalaryRate.query.filter_by(vacancy_id=vacancy_id).all()
+            if vacancy or user_rates:
+                for rate in user_rates:
+                    db.session.delete(rate)
+                db.session.delete(vacancy)
+                db.session.commit()
+                flash("ვაკანსია წაშლილია","success")
+            else:
+                flash("ვაკანსია ვერ მოიძებნა", "danger")
+        else:
+            flash("ვაკანსიის ID შეიყვანეთ", "danger")
+        return redirect(url_for("home"))
     vacancys = CompanyInfo.query.all()
     posts = SalaryRate.query.all()
     return render_template('home.html', posts=posts, ADMIN_USER_ID=ADMIN_USER_ID, vacancys=vacancys)
