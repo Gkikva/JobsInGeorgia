@@ -127,35 +127,37 @@ def load_user(user_id):
 """home page where shown links and posts"""
 
 @app.route('/home', methods=['GET', 'POST'])
-@login_required
 def home():
-    print(f">>> {current_user} at home page")
-    if request.method == "POST":
-        vacancy_id = request.form['inputedValue']
-        print(f">>> {vacancy_id} is DELETING the Post")
-        """search vacancy by inputed id"""
-        if vacancy_id:
-            vacancy= CompanyInfo.query.get(vacancy_id)
-            user_rates = SalaryRate.query.filter_by(vacancy_id=vacancy_id).all()
-            print(f">>> {vacancy}   fount vacancy")
-            print(f">>> {user_rates}  and related  rates")
-            if vacancy or user_rates:
-                for rate in user_rates:
-                    db.session.delete(rate)
-                    print(f">>> Deleting rates")
-                db.session.delete(vacancy)
-                db.session.commit()
-                print(f">>> Deleted vacancy and rates")
-                flash("ვაკანსია წაშლილია","success")
+    if current_user.is_authenticated:
+        print(f">>> {current_user} at home page")
+        if request.method == "POST":
+            vacancy_id = request.form['inputedValue']
+            print(f">>> {vacancy_id} is DELETING the Post")
+            """search vacancy by inputed id"""
+            if vacancy_id:
+                vacancy= CompanyInfo.query.get(vacancy_id)
+                user_rates = SalaryRate.query.filter_by(vacancy_id=vacancy_id).all()
+                print(f">>> {vacancy}   fount vacancy")
+                print(f">>> {user_rates}  and related  rates")
+                if vacancy or user_rates:
+                    for rate in user_rates:
+                        db.session.delete(rate)
+                        print(f">>> Deleting rates")
+                    db.session.delete(vacancy)
+                    db.session.commit()
+                    print(f">>> Deleted vacancy and rates")
+                    flash("ვაკანსია წაშლილია","success")
+                else:
+                    print(f">>> {vacancy_id} there is nos this ID")
+                    flash("ვაკანსია ვერ მოიძებნა", "danger")
             else:
-                print(f">>> {vacancy_id} there is nos this ID")
-                flash("ვაკანსია ვერ მოიძებნა", "danger")
-        else:
-            flash("ვაკანსიის ID შეიყვანეთ", "danger")
-        return redirect(url_for("home"))
-    vacancys = CompanyInfo.query.all()
-    posts = SalaryRate.query.all()
-    return render_template('home.html', posts=posts, ADMIN_USER_ID=ADMIN_USER_ID, vacancys=vacancys)
+                flash("ვაკანსიის ID შეიყვანეთ", "danger")
+            return redirect(url_for("home"))
+        vacancys = CompanyInfo.query.all()
+        posts = SalaryRate.query.all()
+        return render_template('home.html', posts=posts, ADMIN_USER_ID=ADMIN_USER_ID, vacancys=vacancys)
+    else:
+        return  f"<div> უნდა შეხვიდეთ სისტემაში რომ ჩაიტვირთოს ეს გვერდი </div><a href='{url_for('login')}'>სისტემაში შესვლა</a>"
 
 """User Registration route"""
 @app.route('/registration', methods=['GET', 'POST'])
@@ -215,51 +217,56 @@ def logout():
 
 """Upload vacancy route"""
 @app.route("/uploadVacancy",  methods=['GET', 'POST'])
-@login_required
 def uploadVacancy():
-    user_id = User.query.filter_by(email=current_user.email).first()
-    print(f"{current_user} in upload vacancy")
-    if request.method == "POST":
-        company_info = CompanyInfo( company_announcer= request.form["anonouncerFullN"],
-                                    company_announcerPhone = request.form["announcerPhone"],
-                                    company_anouncerEmail = request.form["anouncerPrivateEmail"],
-                                    company_name = request.form["companyName"],
-                                    company_logo = request.form["companylogo"],
-                                    company_ID = request.form["companyCode"],
-                                    company_mail = request.form["companyMail"],
-                                    company_Phonenumber = request.form["companynumber"],
-                                    company_jobtittle =  request.form["companyjobtittle"],
-                                    company_jobplace = request.form["companyjobplace"],
-                                    company_jobShortDesc =  request.form["companyjobshortdescription"],
-                                    company_jobLongDesc =   request.form["companyjoblongtdescription"],
-                                    company_jobSalary = request.form["jobSalary"],
-                                    company_jobstartdate = request.form["jobstartDate"],
-                                    company_jobenddate =  request.form["jobendDate"],
-                                    user_id =user_id.id
-                                   )
-        db.session.add(company_info)
-        db.session.commit()
-        print(f">>> {current_user} uploaded vacancy")
-        flash('წარმატებით აიტვირთა ვაკანსია', "success")
-    return render_template('uploadVacancy.html')
+    if current_user.is_authenticated:
+        user_id = User.query.filter_by(email=current_user.email).first()
+        print(f"{current_user} in upload vacancy")
+        if request.method == "POST":
+            company_info = CompanyInfo( company_announcer= request.form["anonouncerFullN"],
+                                        company_announcerPhone = request.form["announcerPhone"],
+                                        company_anouncerEmail = request.form["anouncerPrivateEmail"],
+                                        company_name = request.form["companyName"],
+                                        company_logo = request.form["companylogo"],
+                                        company_ID = request.form["companyCode"],
+                                        company_mail = request.form["companyMail"],
+                                        company_Phonenumber = request.form["companynumber"],
+                                        company_jobtittle =  request.form["companyjobtittle"],
+                                        company_jobplace = request.form["companyjobplace"],
+                                        company_jobShortDesc =  request.form["companyjobshortdescription"],
+                                        company_jobLongDesc =   request.form["companyjoblongtdescription"],
+                                        company_jobSalary = request.form["jobSalary"],
+                                        company_jobstartdate = request.form["jobstartDate"],
+                                        company_jobenddate =  request.form["jobendDate"],
+                                        user_id =user_id.id
+                                       )
+            db.session.add(company_info)
+            db.session.commit()
+            print(f">>> {current_user} uploaded vacancy")
+            flash('წარმატებით აიტვირთა ვაკანსია', "success")
+        return render_template('uploadVacancy.html')
+    else:
+        return  f"<div> უნდა შეხვიდეთ სისტემაში რომ ჩაიტვირთოს ეს გვერდი </div><a href='{url_for('login')}'>სისტემაში შესვლა</a>"
 
 """Register Vacancy into DB"""
 @app.route('/salaryRate', methods=['GET', 'POST'])
 @login_required
 def salaryRate():
-    print(f">>> {request.method} at salary rate page")
-    if request.method == "POST":
-        info = SalaryRate(
-            vacancy_id = request.form["vacanyId"],
-            salary_amount =request.form["salaryRate"],
-            comment = request.form["comment_salary"],
-            user_id = current_user.id
-        )
-        db.session.add(info)
-        db.session.commit()
-        print(f">>> {current_user} gave rate")
-        flash("წარმატებით აიტვირთა მინიჭებული ხელფასის რაოდენობა","success")
-    return render_template("salaryRate.html")
+    if current_user.is_authenticated:
+        print(f">>> {request.method} at salary rate page")
+        if request.method == "POST":
+            info = SalaryRate(
+                vacancy_id = request.form["vacanyId"],
+                salary_amount =request.form["salaryRate"],
+                comment = request.form["comment_salary"],
+                user_id = current_user.id
+            )
+            db.session.add(info)
+            db.session.commit()
+            print(f">>> {current_user} gave rate")
+            flash("წარმატებით აიტვირთა მინიჭებული ხელფასის რაოდენობა","success")
+        return render_template("salaryRate.html")
+    else:
+        return  f"<div> უნდა შეხვიდეთ სისტემაში რომ ჩაიტვირთოს ეს გვერდი </div><a href='{url_for('login')}'>სისტემაში შესვლა</a>"
 
 """Send Data"""
 @app.route('/api/data', methods=['GET', 'POST'])
